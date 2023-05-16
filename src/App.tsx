@@ -16,7 +16,7 @@ const App: FC = (): JSX.Element => {
 
   /** Views */
   const {useScreens} = useViews();
-  const {Home} = useScreens();
+  const {Home, Login} = useScreens();
 
   return (
     <NavigationContainer theme={MyTheme}>
@@ -26,6 +26,7 @@ const App: FC = (): JSX.Element => {
           headerShown: false,
         }}>
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );
