@@ -26,7 +26,7 @@ const Home: FC<{navigation: any;}> = ({navigation}): JSX.Element => {
           fácil y eficiente!
         </StyledSubtitle>
         <ButtonLogin>
-          <LoginButton onPress={() => navigation.navigate('Register')}>
+          <LoginButton onPress={() => navigation.navigate('Login')}>
             Ingresemos
           </LoginButton>
         </ButtonLogin>
