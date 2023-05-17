@@ -1,7 +1,11 @@
-import {FC} from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { FC } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import useViews from './views';
+import useViews from "./views";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import useConfig from "./config";
+import Route from "./Route";
 
 const App: FC = (): JSX.Element => {
   /** Variables */
@@ -10,24 +14,23 @@ const App: FC = (): JSX.Element => {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: 'white',
-    },
+      background: "white"
+    }
   };
 
-  /** Views */
-  const {useScreens} = useViews();
-  const {Home} = useScreens();
+  /** Config */
+  const { useRedux } = useConfig();
+  const { store, persist } = useRedux();
 
   return (
-    <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Home" component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persist}>
+        <NavigationContainer theme={MyTheme}>
+          <Route/>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
+
   );
 };
 
