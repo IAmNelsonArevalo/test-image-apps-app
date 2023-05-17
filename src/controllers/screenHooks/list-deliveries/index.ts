@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import useApi from "../../../api";
 import useModels from "../../../models";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 const useListDeliveries = () => {
+    const navigation = useNavigation();
     /** Api */
     const {useActions} = useApi();
-    const {dispatch, useComplementsActions} = useActions();
-    const {actGetStatuses, actGetDeliveries} = useComplementsActions();
+    const {dispatch, useComplementsActions, useAuthActions} = useActions();
+    const {actGetStatuses, actGetDeliveries, actSetDelivery} = useComplementsActions();
+    const {actLogout} = useAuthActions();
 
     /** Models */
     const {useSelectors} = useModels();
@@ -17,20 +20,51 @@ const useListDeliveries = () => {
     const statuses = useSelector(statusesSelector);
     const deliveries = useSelector(deliveriesSelector);
 
-    useEffect(() => {
-        dispatch(actGetStatuses({
-            onError: (error) => console.error(error)
-        }));
-
-        dispatch(actGetDeliveries({
-            onError: (error) => console.error(error)
+    const handleDetail = (data: any) => {
+        dispatch(actSetDelivery({
+            onError: (error) => console.error(error),
+            onSuccess: () => {
+                navigation.navigate('Detail' as never)
+            },
+            data   
         }))
+    }
+
+    dispatch(actGetStatuses({
+        onError: (error) => console.error(error)
+    }));
+
+    dispatch(actGetDeliveries({
+        onError: (error) => console.error(error)
+    }))
+
+    const logout = () => {
+        dispatch(actLogout({
+            onSuccess: () => navigation.navigate('Home' as never)
+        }))
+    }
+
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+            dispatch(actGetStatuses({
+                onError: (error) => console.error(error)
+            }));
+    
+            dispatch(actGetDeliveries({
+                onError: (error) => console.error(error)
+            }))
+        })
+            
+        
+        
     }, [])
 
     return {
         auth,
         statuses,
-        deliveries
+        deliveries,
+        handleDetail,
+        logout
     };
 }
 

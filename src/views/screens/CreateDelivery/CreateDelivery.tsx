@@ -31,7 +31,7 @@ import {
 } from "../../../models/interfaces/create-delivery.interfaces";
 import MapView, {Marker} from "react-native-maps";
 
-const Input: FC<InputProps> = ({control, name, keyboard, disable}) => {
+export const Input: FC<InputProps> = ({control, name, keyboard, disable}) => {
   const InputComponent = (props: InputComponentProps) => {
     /** Props */
     const {field, formState} = props;

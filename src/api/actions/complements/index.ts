@@ -11,7 +11,7 @@ const useComplementsActions = () => {
 
   /** Types */
   const { useComplementsTypes } = useTypes();
-  const { GET_STATUSES, GET_DELIVERIES } = useComplementsTypes();
+  const { GET_STATUSES, GET_DELIVERIES, SET_DELIVERIES } = useComplementsTypes();
 
   const actGetStatuses = (request: ActionPropsInterface) => async (dispatch: Dispatch) => {
     const { onError } = request;
@@ -63,11 +63,26 @@ const useComplementsActions = () => {
     }
   };
 
+  const actSetDelivery = (request: Required<ActionPropsInterface & {data: any}>) => async (dispatch: Dispatch) => {
+    const { onError, data, onSuccess } = request;
+    try {
+      dispatch({
+        type: SET_DELIVERIES,
+        payload: data
+      });
+
+      onSuccess && onSuccess();
+    } catch (error) {
+      onError && onError(error);
+    }
+  };
+
   return {
     actGetStatuses,
     actGetDeliveries,
     actEditDelivery,
-    actCreateDelivery
+    actCreateDelivery,
+    actSetDelivery
   };
 };
 

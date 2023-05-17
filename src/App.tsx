@@ -5,6 +5,7 @@ import useViews from "./views";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import useConfig from "./config";
+import Route from "./Route";
 
 const App: FC = (): JSX.Element => {
   /** Variables */
@@ -17,10 +18,6 @@ const App: FC = (): JSX.Element => {
     }
   };
 
-  /** Views */
-  const { useScreens } = useViews();
-  const { Home, Login, Register, ListDeliveries, CreateDelivery } = useScreens();
-
   /** Config */
   const { useRedux } = useConfig();
   const { store, persist } = useRedux();
@@ -29,17 +26,7 @@ const App: FC = (): JSX.Element => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persist}>
         <NavigationContainer theme={MyTheme}>
-          <Stack.Navigator
-            initialRouteName="ListDeliveries"
-            screenOptions={{
-              headerShown: false
-            }}>
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="ListDeliveries" component={ListDeliveries} />
-            <Stack.Screen name="CreateDelivery" component={CreateDelivery}/>
-          </Stack.Navigator>
+          <Route/>
         </NavigationContainer>
       </PersistGate>
     </Provider>

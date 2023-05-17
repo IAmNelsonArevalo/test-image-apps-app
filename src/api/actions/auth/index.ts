@@ -3,8 +3,8 @@ import { Dispatch } from "redux";
 import useProviders from "../../providers";
 import useTypes from "../../../types";
 /** Interfaces & Types */
-import { LoginActionProps } from "models/interfaces/login.interfaces";
-import { RegisterActionsInterface } from "models/interfaces/register.interfaces";
+import { LoginActionProps } from "../../../models/interfaces/login.interfaces";
+import { RegisterActionsInterface } from "../../../models/interfaces/register.interfaces";
 
 const useAuthActions = () => {
   /** Providers */
@@ -48,9 +48,27 @@ const useAuthActions = () => {
     }
   }
 
+  const actLogout = (request: any) => async (dispatch: Dispatch) => {
+    const { onError, onSuccess } = request;
+
+    try {
+
+      dispatch({
+        type: LOGIN,
+        payload: {"token": "", user: {}}
+      });
+
+      onSuccess && onSuccess();
+    } catch (error: any) {
+      console.error(error)
+      onError && onError(error);
+    }
+  }
+
   return {
     actRegister,
-    actLogin
+    actLogin,
+    actLogout
   };
 };
 

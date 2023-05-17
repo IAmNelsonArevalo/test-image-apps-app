@@ -45,6 +45,7 @@ export const FilterContainer = styled.View`
   flex-direction: row;
   gap: 10px;
   width: 98%;
+  padding-bottom: 20px;
 `;
 
 export const CardTable = styled.TouchableOpacity`
@@ -57,8 +58,8 @@ export const CardTable = styled.TouchableOpacity`
   align-items: center;
 `;
 
-export const CardText = styled.Text`
-  color: #000000;
+export const CardText = styled.Text<{active: boolean;}>`
+  ${({active}) => active ? "color: #fff; font-weight: 600;" : "color: #000;"}
 `;
 
 export const LabelText = styled.Text`
@@ -69,4 +70,59 @@ export const LabelText = styled.Text`
 export const CardDelivery = styled.View`
   background: #f2f2f2;
   border-radius: 15.5172px;
+  flex-direction: row;
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+export const CardDeliveryImage = styled.Image`
+  width: 50px;
+  height: 50px;
+`;
+
+export const CardDeliveryName = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+`;
+
+export const CardDeliveryId = styled.Text`
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  width: 120px;
+`;
+
+export const CardDeliveryStatus = styled.TouchableOpacity`
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+`;
+
+export const CardDeliveryStatusName = styled.Text`
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+`;
+
+export const GoBackButton = styled.TouchableOpacity`
+  background: #FE6F23;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  padding-left: 20px;
+    padding-right: 20px;
+
+    height: 40px;
 `;
