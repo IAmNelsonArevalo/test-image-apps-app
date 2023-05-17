@@ -30,7 +30,7 @@ const App: FC = (): JSX.Element => {
       <PersistGate loading={null} persistor={persist}>
         <NavigationContainer theme={MyTheme}>
           <Stack.Navigator
-            initialRouteName="Home"
+            initialRouteName="ListDeliveries"
             screenOptions={{
               headerShown: false
             }}>

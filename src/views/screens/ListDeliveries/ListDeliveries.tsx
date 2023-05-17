@@ -1,5 +1,6 @@
 import { ContainerTemplate } from "../../../styles/general.styles";
 import {
+  CardDelivery,
   CardTable,
   CardText,
   CreateDelivery,
@@ -18,9 +19,9 @@ const ListDeliveries: FC<{navigation: any}> = ({navigation}) => {
   /** Controllers */
   const { useScreenHooks } = useControllers();
   const { useListDeliveries } = useScreenHooks();
-  const { auth, statuses } = useListDeliveries();
+  const { auth, statuses, deliveries } = useListDeliveries();
 
-  console.log(statuses);
+  console.log(deliveries);
 
   const countries = ["Egypt", "Canada", "Australia", "Ireland"]
 
@@ -43,6 +44,9 @@ const ListDeliveries: FC<{navigation: any}> = ({navigation}) => {
             ))
           }
         </FilterContainer>
+        <CardDelivery>
+          
+        </CardDelivery>
       </UserContainer>
     </ContainerTemplate>
   );

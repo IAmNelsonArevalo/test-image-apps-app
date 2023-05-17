@@ -8,7 +8,7 @@ const useComplementsReducers = () => {
 
   /** Types */
   const { useComplementsTypes } = useTypes();
-  const { GET_STATUSES } = useComplementsTypes();
+  const { GET_STATUSES, GET_DELIVERIES } = useComplementsTypes();
 
   const statuses = createReducer({"statuses": []}, {
     [GET_STATUSES](state: any, action: any) {
@@ -19,8 +19,18 @@ const useComplementsReducers = () => {
     }
   });
 
+  const deliveries = createReducer({"deliveries": []}, {
+    [GET_DELIVERIES](state: any, action: any) {
+      return {
+        ...state,
+        deliveries: action.payload
+      };
+    }
+  });
+
   return {
-    statuses
+    statuses,
+    deliveries
   };
 }
 

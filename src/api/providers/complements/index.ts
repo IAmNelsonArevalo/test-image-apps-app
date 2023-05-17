@@ -7,8 +7,26 @@ const useComplementsProviders = () => {
     return trackPromise(request);
   }
 
+  const createDelivery = (data: any) => {
+    const request = axios.post('/deliveries/create-delivery', data);
+    return trackPromise(request);
+  }
+
+  const editDelivery = (data: any) => {
+    const request = axios.post('/deliveries/edit-delivery', data);
+    return trackPromise(request);
+  }
+
+  const getDeliveries = () => {
+    const request = axios.get('/deliveries/get-deliveries');
+    return trackPromise(request);
+  }
+
   return {
-    getStatuses
+    getStatuses,
+    createDelivery,
+    editDelivery,
+    getDeliveries
   };
 }
 

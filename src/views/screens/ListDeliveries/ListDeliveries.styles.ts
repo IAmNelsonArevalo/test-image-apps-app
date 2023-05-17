@@ -21,7 +21,7 @@ export const UserNameText = styled.Text`
 
 export const CreateDelivery = styled.TouchableOpacity`
   margin-top: 20px;
-  background: #743D73;
+  background: #743d73;
   padding-left: 30px;
   padding-right: 30px;
   height: 30px;
@@ -36,7 +36,7 @@ export const CreateDeliveryText = styled.Text`
 `;
 
 export const Select = styled(SelectDropdown)`
-  border: 1px solid #743D73;
+  border: 1px solid #743d73;
 `;
 
 export const FilterContainer = styled.View`
@@ -49,7 +49,7 @@ export const FilterContainer = styled.View`
 
 export const CardTable = styled.TouchableOpacity`
   width: 30%;
-  background: #F2F2F2;
+  background: #f2f2f2;
   border-radius: 20px;
   height: 40px;
   display: flex;
@@ -64,4 +64,9 @@ export const CardText = styled.Text`
 export const LabelText = styled.Text`
   font-weight: 600;
   margin-top: 10px;
+`;
+
+export const CardDelivery = styled.View`
+  background: #f2f2f2;
+  border-radius: 15.5172px;
 `;

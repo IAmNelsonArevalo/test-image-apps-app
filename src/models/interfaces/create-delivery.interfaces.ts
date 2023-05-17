@@ -5,6 +5,7 @@ import {
   FieldValues,
   UseFormStateReturn,
 } from "react-hook-form";
+import { ActionPropsInterface } from "./general.interfaces";
 
 export interface InputProps {
   name: string;
@@ -23,10 +24,19 @@ export interface InputProps {
     | "twitter"
     | "web-search"
     | "visible-password";
+  disable?: boolean;
 }
 
 export interface InputComponentProps {
   field: ControllerRenderProps<FieldValues>;
   fieldState: ControllerFieldState;
   formState: UseFormStateReturn<FieldValues>;
+}
+
+export interface CreateDeliveryAction extends ActionPropsInterface {
+  data: any
+}
+
+export interface EditDeliveryAction extends ActionPropsInterface {
+  data: any
 }

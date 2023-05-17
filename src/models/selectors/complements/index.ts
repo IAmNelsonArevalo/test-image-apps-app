@@ -10,8 +10,15 @@ const useComplementsSelectors = () => {
         (statuses: any) => statuses.statuses
     );
 
+    const deliveriesSelector = createSelector(
+        (state: any) => state.deliveries,
+        (deliveries: any) => deliveries.deliveries
+    );
+
+
     return {
-        statusesSelector
+        statusesSelector,
+        deliveriesSelector
     }
 }
 

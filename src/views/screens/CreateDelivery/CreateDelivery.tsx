@@ -14,10 +14,14 @@ import PlacesInput from "react-native-places-input";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import useControllers from "../../../controllers";
 import {
+  ButtonAccepted,
+  ButtonNext,
+  ButtonText,
   FormGroup,
   Label,
   StyledChangeAddress,
   StyledInput,
+  TextAccepted,
   TitlePage,
 } from "./CreateDelivery.styles";
 import {Controller} from "react-hook-form";
@@ -25,19 +29,28 @@ import {
   InputComponentProps,
   InputProps,
 } from "../../../models/interfaces/create-delivery.interfaces";
-import MapView from "react-native-maps";
+import MapView, {Marker} from "react-native-maps";
 
-const Input: FC<InputProps> = ({control, name, keyboard}) => {
+const Input: FC<InputProps> = ({control, name, keyboard, disable}) => {
   const InputComponent = (props: InputComponentProps) => {
     /** Props */
-    const {field} = props;
+    const {field, formState} = props;
 
     return (
-      <StyledInput
-        value={field.value}
-        onChangeText={(e: any) => field.onChange(e)}
-        keyboardType={keyboard}
-      />
+      <Fragment>
+        <StyledInput
+          value={field.value}
+          onChangeText={(e: any) => field.onChange(e)}
+          keyboardType={keyboard}
+          editable={disable ? false : true}
+          selectTextOnFocus={disable ? false : true}
+        />
+        {formState.errors[name] && (
+          <Text style={{color: "red", fontSize: 12}}>
+            {formState.errors[name]?.message as ReactNode}
+          </Text>
+        )}
+      </Fragment>
     );
   };
 
@@ -49,7 +62,23 @@ const CreateDelivery: FC<{navigation: any}> = ({navigation}): JSX.Element => {
   /** Controllers */
   const {useScreenHooks} = useControllers();
   const {useCreateDelivery} = useScreenHooks();
-  const {step, control, openModalAddress} = useCreateDelivery();
+  const {
+    step,
+    control,
+    openModalAddress,
+    setValue,
+    closeModalAddress,
+    setStep,
+    handleSubmit,
+    handlerDelivery,
+  } = useCreateDelivery();
+
+  /** States */
+  const [type, setType] = useState("sender");
+  const [coordenates, setCoordenates] = useState<any>({
+    latitude: 37.78825, // Latitud del marcador
+    longitude: -122.4324,
+  });
 
   return (
     <ContainerTemplate>
@@ -76,13 +105,6 @@ const CreateDelivery: FC<{navigation: any}> = ({navigation}): JSX.Element => {
             <Input name="sender_phone" control={control} keyboard="numeric" />
           </FormGroup>
           <FormGroup>
-            <Label>Direccion de recogida</Label>
-            <Input name="sender_phone" control={control} keyboard="numeric" />
-            <StyledChangeAddress onPress={openModalAddress}>
-              <Text>Cambiar Direccion</Text>
-            </StyledChangeAddress>
-          </FormGroup>
-          <FormGroup>
             <Label>Nombre del destinatario</Label>
             <Input name="recipient_name" control={control} keyboard="default" />
           </FormGroup>
@@ -102,18 +124,89 @@ const CreateDelivery: FC<{navigation: any}> = ({navigation}): JSX.Element => {
               keyboard="numeric"
             />
           </FormGroup>
+          <ButtonNext onPress={() => setStep(2)}>
+            <ButtonText>Siguiente</ButtonText>
+          </ButtonNext>
+        </Fragment>
+      ) : step === 2 ? (
+        <Fragment>
+          <GoBackButton onPress={() => setStep(1)}>
+            <Image source={require("../../../assets/images/Back.png")} />
+          </GoBackButton>
+          <TitlePage>Nueva Entrega</TitlePage>
+          <FormGroup>
+            <Label>Direccion de recogida</Label>
+            <Input
+              name="sender_address"
+              control={control}
+              keyboard="numeric"
+              disable
+            />
+            <StyledChangeAddress
+              onPress={() => {
+                setType("sender");
+                openModalAddress();
+              }}
+            >
+              <Text>Cambiar Direccion</Text>
+            </StyledChangeAddress>
+          </FormGroup>
+          <FormGroup>
+            <Label>Direccion de destino</Label>
+            <Input
+              name="recipient_address"
+              control={control}
+              keyboard="default"
+              disable
+            />
+            <StyledChangeAddress
+              onPress={() => {
+                setType("recipient");
+                openModalAddress();
+              }}
+            >
+              <Text>Cambiar Direccion</Text>
+            </StyledChangeAddress>
+          </FormGroup>
+          <ButtonNext onPress={handleSubmit(handlerDelivery)}>
+            <ButtonText>Enviar</ButtonText>
+          </ButtonNext>
         </Fragment>
       ) : (
         <Fragment>
           <View style={styles.container}>
-
+            <MapView
+              style={{flex: 1, height: "50%", marginBottom: 20}}
+              region={coordenates}
+              minZoomLevel={15}
+            >
+              <Marker coordinate={coordenates} />
+            </MapView>
             <GooglePlacesAutocomplete
+              styles={{height: "20%"}}
               GooglePlacesDetailsQuery={{fields: "geometry"}}
               fetchDetails={true} // you need this to fetch the details object onPress
               placeholder="Search"
               onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                console.log(details?.geometry?.location);
+                setCoordenates({
+                  latitude: details?.geometry?.location.lat,
+                  longitude: details?.geometry?.location.lng,
+                });
+                if (type === "sender") {
+                  setValue("sender_address", data.description);
+                  setValue("sender_latitude", details?.geometry?.location.lat);
+                  setValue("sender_longitude", details?.geometry?.location.lng);
+                } else {
+                  setValue("recipient_address", data.description);
+                  setValue(
+                    "recipient_latitude",
+                    details?.geometry?.location.lat,
+                  );
+                  setValue(
+                    "recipient_longitude",
+                    details?.geometry?.location.lng,
+                  );
+                }
               }}
               query={{
                 key: "AIzaSyDj4gHG9g92rnRm5axUR5Dl4IgIMZcfWXA",
@@ -121,6 +214,9 @@ const CreateDelivery: FC<{navigation: any}> = ({navigation}): JSX.Element => {
               }}
               onFail={error => console.error(error)}
             />
+            <ButtonAccepted onPress={closeModalAddress}>
+              <TextAccepted>Aceptar</TextAccepted>
+            </ButtonAccepted>
           </View>
         </Fragment>
       )}
